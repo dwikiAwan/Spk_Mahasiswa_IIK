@@ -217,5 +217,21 @@ def show_infographics():
                            recommendation_counts=sorted_recommendation_counts,
                            total_students=total_students)
 
+
+@app.route('/delete_mahasiswa/<int:id>', methods=['DELETE'])
+def delete_mahasiswa(id):
+    conn = get_db_connection()
+    try:
+        conn.execute('DELETE FROM mahasiswa WHERE id = ?', (id,))
+        conn.commit()
+        conn.close()
+        return {'message': 'Mahasiswa berhasil dihapus'}, 200
+    except Exception as e:
+        conn.rollback()
+        conn.close()
+        return {'message': f'Gagal menghapus mahasiswa: {str(e)}'}, 500
+
+
+
 if __name__ == '__main__':
     app.run(debug=True)

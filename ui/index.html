@@ -11,42 +11,149 @@
     <style>
         body {
             font-family: 'Inter', sans-serif;
-            background-color: #f0f4f8; /* Menggunakan warna latar belakang dari infografik */
+            color: #2D3142; /* Warna teks gelap standar */
+            margin: 0;
+            padding: 0;
+            overflow: hidden; /* Mencegah body memiliki scrollbar */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            position: relative; /* Diperlukan untuk penempatan video */
+            background-color: #f0f4f8; /* Fallback background color */
+        }
+        /* Gaya untuk video latar belakang */
+        #background-video {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            min-width: 100%;
+            min-height: 100%;
+            width: auto;
+            height: auto;
+            z-index: -1; /* Menempatkan video di belakang konten */
+            transform: translateX(-50%) translateY(-50%);
+            background-size: cover;
+            filter: brightness(60%); /* Membuat video sedikit lebih gelap agar teks lebih mudah dibaca */
+        }
+        .card-standard {
+            background: rgba(255, 255, 255, 0.85); /* Latar belakang kartu putih semi-transparan */
+            backdrop-filter: blur(5px); /* Efek blur ringan untuk kedalaman */
+            border: 1px solid rgba(226, 232, 240, 0.5); /* Border halus semi-transparan */
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1); /* Bayangan standar */
+            transition: all 0.3s ease-in-out;
+        }
+        .card-standard:hover {
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.15);
+            transform: translateY(-3px); /* Efek sedikit mengangkat saat hover */
+        }
+        .input-standard {
+            background-color: #FFFFFF; /* Latar belakang input putih */
+            border: 1px solid #CBD5E0; /* Border input abu-abu */
+            color: #2D3142; /* Warna teks input gelap */
+            transition: all 0.2s ease-in-out;
+        }
+        .input-standard:focus {
+            border-color: #4299E1; /* Warna border fokus biru */
+            box-shadow: 0 0 0 3px rgba(66, 153, 225, 0.3); /* Efek glow ringan saat fokus */
+        }
+        .btn-primary-standard {
+            background-color: #4299E1; /* Warna biru standar untuk tombol utama */
+            color: #FFFFFF;
+            border: none;
+            box-shadow: 0 5px 10px rgba(66, 153, 225, 0.3); /* Bayangan tombol */
+            transition: all 0.3s ease-in-out;
+        }
+        .btn-primary-standard:hover {
+            background-color: #3182CE; /* Warna biru lebih gelap saat hover */
+            box-shadow: 0 8px 15px rgba(66, 153, 225, 0.4);
+            transform: translateY(-1px); /* Efek sedikit mengangkat saat hover */
+        }
+        .btn-secondary-standard {
+            background-color: #EF4444; /* Warna merah untuk tombol sekunder */
+            color: #FFFFFF; /* Warna teks putih untuk kontras */
+            border: 1px solid #DC2626; /* Border merah gelap */
+            box-shadow: 0 5px 10px rgba(239, 68, 68, 0.3); /* Bayangan merah */
+            transition: all 0.3s ease-in-out;
+        }
+        .btn-secondary-standard:hover {
+            background-color: #DC2626; /* Warna merah lebih gelap saat hover */
+            transform: translateY(-1px);
+            box-shadow: 0 8px 15px rgba(239, 68, 68, 0.4);
+        }
+        h1, h2 {
+            color: #2D3142; /* Warna judul gelap standar */
+            text-shadow: none; /* Menghapus efek glow */
+        }
+        label {
+            color: #2D3142; /* Warna label gelap standar */
         }
     </style>
 </head>
 <body class="text-[#2D3142]">
 
-    <div class="container mx-auto p-4 md:p-8 flex flex-col items-center justify-center min-h-[calc(100vh-64px)]">
-        <div class="bg-white p-8 rounded-xl shadow-lg w-full max-w-md text-center">
-            <h1 class="text-3xl font-bold mb-6 text-blue-700">Sistem Pendukung Keputusan Penjurusan Mahasiswa</h1>
+    <!-- Video latar belakang -->
+    <video autoplay loop muted playsinline id="background-video">
+        <source src="{{ url_for('static', filename='bgtwo.mp4') }}" type="video/mp4">
+        Your browser does not support the video tag.
+    </video>
+
+    <!-- Kontainer utama yang memusatkan konten secara vertikal dan horizontal -->
+    <div class="container mx-auto p-4 md:p-8 flex flex-col items-center justify-center min-h-screen relative z-10">
+        <!-- Kartu standar yang berisi formulir -->
+        <div class="card-standard p-6 md:p-8 rounded-xl w-full max-w-2xl text-center">
+            <!-- Judul utama aplikasi -->
+            <h1 class="text-2xl sm:text-2xl font-bold mb-5">Sistem Pendukung Keputusan Penjurusan Mahasiswa</h1>
+            
+            <!-- Formulir input data mahasiswa -->
             <form action="/calculate" method="post" class="space-y-4">
+                <!-- Input Nama Mahasiswa -->
                 <div class="text-left">
-                    <label for="nama" class="block text-gray-700 text-sm font-bold mb-2">Nama Mahasiswa:</label>
-                    <input type="text" id="nama" name="nama" required class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline focus:border-blue-500">
+                    <label for="nama" class="block text-sm font-semibold mb-1">Nama Mahasiswa:</label>
+                    <input type="text" id="nama" name="nama" required 
+                           class="input-standard rounded-lg w-full py-2 px-3 leading-tight focus:outline-none focus:shadow-outline">
                 </div>
                 
-                <h2 class="text-2xl font-semibold mt-6 mb-4 text-gray-800">Input Nilai dan Minat</h2>
+                <!-- Sub-judul untuk bagian input nilai dan minat -->
+                <h2 class="text-xl sm:text-1xl font-bold mt-6 mb-4">Input Nilai dan Minat</h2>
+                
+                <!-- Input Nilai Logika Pemrograman -->
                 <div class="text-left">
-                    <label for="c1" class="block text-gray-700 text-sm font-bold mb-2">Nilai Logika Pemrograman (0-100):</label>
-                    <input type="number" id="c1" name="c1" min="0" max="100" required class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline focus:border-blue-500">
+                    <label for="c1" class="block text-sm font-semibold mb-1">Nilai Logika Pemrograman (0-100):</label>
+                    <input type="number" id="c1" name="c1" min="0" max="100" required 
+                           class="input-standard rounded-lg w-full py-2 px-3 leading-tight focus:outline-none focus:shadow-outline">
                 </div>
+                <!-- Input Nilai Desain UI/UX -->
                 <div class="text-left">
-                    <label for="c2" class="block text-gray-700 text-sm font-bold mb-2">Nilai Desain UI/UX (0-100):</label>
-                    <input type="number" id="c2" name="c2" min="0" max="100" required class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline focus:border-blue-500">
+                    <label for="c2" class="block text-sm font-semibold mb-1">Nilai Desain UI/UX (0-100):</label>
+                    <input type="number" id="c2" name="c2" min="0" max="100" required 
+                           class="input-standard rounded-lg w-full py-2 px-3 leading-tight focus:outline-none focus:shadow-outline">
                 </div>
+                <!-- Input Nilai Matematika Dasar -->
                 <div class="text-left">
-                    <label for="c3" class="block text-gray-700 text-sm font-bold mb-2">Nilai Matematika Dasar (0-100):</label>
-                    <input type="number" id="c3" name="c3" min="0" max="100" required class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline focus:border-blue-500">
+                    <label for="c3" class="block text-sm font-semibold mb-1">Nilai Matematika Dasar (0-100):</label>
+                    <input type="number" id="c3" name="c3" min="0" max="100" required 
+                           class="input-standard rounded-lg w-full py-2 px-3 leading-tight focus:outline-none focus:shadow-outline">
                 </div>
+                <!-- Input Minat terhadap bidang -->
                 <div class="text-left">
-                    <label for="c4" class="block text-gray-700 text-sm font-bold mb-2">Minat terhadap bidang (1-5):</label>
-                    <input type="number" id="c4" name="c4" min="1" max="5" required class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline focus:border-blue-500">
+                    <label for="c4" class="block text-sm font-semibold mb-1">Minat terhadap bidang (1-5):</label>
+                    <input type="number" id="c4" name="c4" min="1" max="5" required 
+                           class="input-standard rounded-lg w-full py-2 px-3 leading-tight focus:outline-none focus:shadow-outline">
                 </div>
                 
-                <button type="submit" class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-lg focus:outline-none focus:shadow-outline w-full transition-colors duration-200">Lihat Rekomendasi</button>
+                <!-- Tombol untuk melihat rekomendasi -->
+                <button type="submit" 
+                        class="btn-primary-standard text-white font-bold py-2 px-4 rounded-lg focus:outline-none focus:shadow-outline w-full">
+                    Lihat Rekomendasi
+                </button>
             </form>
-            <a href="/" class="inline-block mt-6 bg-gray-200 hover:bg-gray-300 text-gray-800 font-bold py-2 px-4 rounded-lg transition-colors duration-200">Kembali ke Landing Page</a>
+            
+            <!-- Tautan kembali ke Landing Page -->
+            <a href="/" 
+               class="btn-secondary-standard inline-block mt-5 font-bold py-2 px-4 rounded-lg w-full md:w-auto">
+                Kembali ke Landing Page
+            </a>
         </div>
     </div>
 </body>

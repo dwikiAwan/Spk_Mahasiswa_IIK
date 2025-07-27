@@ -11,7 +11,18 @@
     <style>
         body {
             font-family: 'Inter', sans-serif;
-            background-color: #f0f4f8;
+            color: #2D3142; /* Warna teks gelap standar */
+            margin: 0;
+            padding: 0;
+            /* Mengizinkan pengguliran vertikal */
+            overflow-y: auto; 
+            overflow-x: hidden; /* Mencegah pengguliran horizontal */
+            display: flex;
+            flex-direction: column; /* Mengatur tata letak kolom agar konten bisa memanjang */
+            justify-content: flex-start; /* Konten dimulai dari atas */
+            align-items: center;
+            min-height: 100vh; /* Memastikan body selalu mengambil tinggi penuh viewport */
+            background-color: #f0f4f8; /* Warna latar belakang abu-abu terang */
         }
         /* Styling untuk tabel */
         table {
@@ -20,44 +31,126 @@
             margin-top: 20px;
         }
         th, td {
-            border: 1px solid #e2e8f0; /* Warna border yang lebih lembut */
+            border: 1px solid rgba(226, 232, 240, 0.5); /* Warna border yang lebih lembut dan transparan */
             padding: 12px;
             text-align: left;
         }
         th {
-            background-color: #edf2f7; /* Warna header tabel */
+            background-color: rgba(237, 242, 247, 0.8); /* Warna header tabel semi-transparan */
             font-weight: 600;
             color: #2d3748;
         }
         tr:nth-child(even) {
-            background-color: #f7fafc; /* Warna latar belakang baris genap */
+            background-color: rgba(247, 250, 252, 0.7); /* Warna latar belakang baris genap semi-transparan */
         }
         tr:hover {
-            background-color: #e2e8f0; /* Efek hover pada baris */
+            background-color: rgba(226, 232, 240, 0.6); /* Efek hover pada baris semi-transparan */
+        }
+
+        /* Gaya untuk card utama dan filter section */
+        .card-glass {
+            background: rgba(255, 255, 255, 0.9); /* Latar belakang semi-transparan untuk efek glassmorphism */
+            backdrop-filter: blur(10px); /* Efek blur untuk glassmorphism */
+            border: 1px solid rgba(226, 232, 240, 0.5); /* Border halus semi-transparan */
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1); /* Bayangan yang lebih menonjol */
+            transition: all 0.3s ease-in-out;
+        }
+        .card-glass:hover {
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
+            transform: translateY(-3px); /* Efek sedikit mengangkat saat hover */
+        }
+        /* Gaya untuk tombol filter */
+        .btn-filter-primary {
+            background-color: #4299E1; /* Warna biru standar untuk tombol filter */
+            color: #FFFFFF;
+            border: none;
+            box-shadow: 0 5px 10px rgba(66, 153, 225, 0.3);
+            transition: all 0.3s ease-in-out;
+        }
+        .btn-filter-primary:hover {
+            background-color: #3182CE;
+            box-shadow: 0 8px 15px rgba(66, 153, 225, 0.4);
+            transform: translateY(-1px);
+        }
+        /* Gaya untuk tombol kembali */
+        .btn-back-red {
+            background-color: #EF4444; /* Warna merah untuk tombol kembali */
+            color: #FFFFFF;
+            border: 1px solid #DC2626;
+            box-shadow: 0 5px 10px rgba(239, 68, 68, 0.3);
+            transition: all 0.3s ease-in-out;
+        }
+        .btn-back-red:hover {
+            background-color: #DC2626;
+            transform: translateY(-1px);
+            box-shadow: 0 8px 15px rgba(239, 68, 68, 0.4);
+        }
+        /* Gaya untuk tombol hapus */
+        .btn-delete {
+            background-color: #EF4444; /* Merah untuk tombol hapus */
+            color: #FFFFFF;
+            padding: 6px 10px;
+            border-radius: 6px;
+            font-weight: 600;
+            transition: all 0.2s ease-in-out;
+            border: none;
+            cursor: pointer;
+        }
+        .btn-delete:hover {
+            background-color: #DC2626;
+            transform: translateY(-1px);
+            box-shadow: 0 2px 5px rgba(239, 68, 68, 0.4);
+        }
+        /* Warna teks untuk judul dan label di atas latar belakang solid */
+        .text-on-video { /* Nama kelas tetap sama, tapi warnanya disesuaikan untuk latar belakang terang */
+            color: #2D3142; /* Warna teks gelap standar */
+            text-shadow: none; /* Menghapus bayangan teks */
+        }
+        /* Input teks untuk pencarian */
+        .input-search {
+            background-color: #FFFFFF; /* Latar belakang input putih solid */
+            border: 1px solid #CBD5E0;
+            color: #2D3142;
+            transition: all 0.2s ease-in-out;
+        }
+        .input-search:focus {
+            border-color: #4299E1;
+            box-shadow: 0 0 0 3px rgba(66, 153, 225, 0.3);
         }
     </style>
 </head>
 <body class="text-[#2D3142]">
 
-    <div class="container mx-auto p-4 md:p-8">
-        <h1 class="text-3xl font-bold mb-6 text-center text-blue-700">Daftar Mahasiswa Terdaftar</h1>
+    <div class="container mx-auto p-4 md:p-8 relative z-10">
+        <h1 class="text-3xl font-bold mb-6 text-center text-on-video">Daftar Mahasiswa Terdaftar</h1>
+        
+        <!-- Tombol kembali dipindahkan ke atas, setelah judul -->
+        <div class="flex justify-center mb-8">
+            <a href="/" class="btn-back-red inline-block font-bold py-2 px-4 rounded-lg transition-colors duration-200">Kembali</a>
+        </div>
 
-        <div class="filter-section bg-white p-6 rounded-xl shadow-md mb-8 flex flex-col md:flex-row items-center justify-center space-y-4 md:space-y-0 md:space-x-4">
-            <form action="/students" method="get" class="flex flex-col md:flex-row items-center space-y-4 md:space-y-0 md:space-x-4 w-full md:w-auto">
-                <label for="jurusan-filter" class="text-gray-700 font-semibold">Filter Berdasarkan Jurusan:</label>
-                <select name="jurusan" id="jurusan-filter" class="block w-full md:w-auto p-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500">
-                    <option value="all" {% if not selected_jurusan or selected_jurusan == 'all' %}selected{% endif %}>Semua Jurusan</option>
+        <div class="filter-section card-glass p-6 rounded-xl shadow-md mb-8 flex flex-col md:flex-row items-center justify-center space-y-4 md:space-y-0 md:space-x-4">
+            <!-- Form untuk filter dan pencarian -->
+            <form onsubmit="return false;" class="flex flex-col md:flex-row items-center space-y-4 md:space-y-0 md:space-x-4 w-full md:w-auto">
+                <label for="search-input" class="text-on-video font-semibold">Cari Nama:</label>
+                <input type="text" id="search-input" placeholder="Cari nama mahasiswa..." 
+                       class="input-search block w-full md:w-auto p-2 border rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 text-gray-800">
+
+                <label for="jurusan-filter" class="text-on-video font-semibold">Filter Jurusan:</label>
+                <select name="jurusan" id="jurusan-filter" 
+                        class="block w-full md:w-auto p-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 bg-white text-gray-800">
+                    <option value="all">Semua Jurusan</option>
                     {% for jurusan in all_jurusan_names %}
-                        <option value="{{ jurusan }}" {% if selected_jurusan == jurusan %}selected{% endif %}>{{ jurusan }}</option>
+                        <option value="{{ jurusan }}">{{ jurusan }}</option>
                     {% endfor %}
                 </select>
-                <button type="submit" class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-lg transition-colors duration-200 w-full md:w-auto">Filter</button>
+                <!-- Tombol filter dihilangkan karena filter dilakukan secara real-time dengan JS -->
             </form>
         </div>
 
-        <div class="bg-white p-6 rounded-xl shadow-md overflow-x-auto">
+        <div class="card-glass p-6 rounded-xl shadow-md overflow-x-auto">
             {% if mahasiswa_list %}
-            <table>
+            <table id="mahasiswa-table">
                 <thead>
                     <tr>
                         <th>ID</th>
@@ -67,11 +160,12 @@
                         <th>C3 (Matematika)</th>
                         <th>C4 (Minat)</th>
                         <th>Rekomendasi Jurusan</th>
+                        <th>Aksi</th> <!-- Kolom baru untuk tombol hapus -->
                     </tr>
                 </thead>
                 <tbody>
                     {% for mahasiswa in mahasiswa_list %}
-                    <tr>
+                    <tr data-id="{{ mahasiswa.id }}"> <!-- Menambahkan data-id ke baris -->
                         <td>{{ mahasiswa.id }}</td>
                         <td>{{ mahasiswa.nama }}</td>
                         <td>{{ mahasiswa.c1 }}</td>
@@ -79,15 +173,128 @@
                         <td>{{ mahasiswa.c3 }}</td>
                         <td>{{ mahasiswa.c4 }}</td>
                         <td>{{ mahasiswa.rekomendasi }}</td>
+                        <td>
+                            <button class="btn-delete" data-id="{{ mahasiswa.id }}">Hapus</button>
+                        </td>
                     </tr>
                     {% endfor %}
                 </tbody>
             </table>
             {% else %}
-            <p class="text-center text-gray-600">Belum ada data mahasiswa yang terdaftar.</p>
+            <p class="text-center text-on-video" id="no-data-message">Belum ada data mahasiswa yang terdaftar.</p>
             {% endif %}
         </div>
-        <a href="/check" class="bg-gray-200 hover:bg-gray-300 text-gray-800 font-bold py-2 px-4 rounded-lg transition-colors duration-200 inline-block mt-8">Kembali ke Form Input</a>
     </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const searchInput = document.getElementById('search-input');
+            const jurusanFilter = document.getElementById('jurusan-filter');
+            const tableBody = document.querySelector('#mahasiswa-table tbody');
+            const noDataMessage = document.getElementById('no-data-message');
+            const table = document.getElementById('mahasiswa-table');
+
+            // Simpan semua baris tabel asli
+            const allTableRows = tableBody ? Array.from(tableBody.querySelectorAll('tr')) : [];
+
+            // Fungsi untuk menerapkan filter dan pencarian
+            function applyFilters() {
+                const searchTerm = searchInput.value.toLowerCase();
+                const selectedJurusan = jurusanFilter.value.toLowerCase();
+                let rowsFound = 0;
+
+                allTableRows.forEach(row => {
+                    const namaCell = row.cells[1] ? row.cells[1].textContent.toLowerCase() : '';
+                    const jurusanCell = row.cells[6] ? row.cells[6].textContent.toLowerCase() : '';
+
+                    const matchesSearch = namaCell.includes(searchTerm);
+                    const matchesJurusan = selectedJurusan === 'all' || jurusanCell === selectedJurusan;
+
+                    if (matchesSearch && matchesJurusan) {
+                        row.style.display = ''; // Tampilkan baris
+                        rowsFound++;
+                    } else {
+                        row.style.display = 'none'; // Sembunyikan baris
+                    }
+                });
+
+                // Tampilkan atau sembunyikan pesan "Belum ada data"
+                if (noDataMessage) {
+                    if (rowsFound === 0) {
+                        noDataMessage.style.display = 'block';
+                        if (table) table.style.display = 'none'; // Sembunyikan tabel jika tidak ada data
+                    } else {
+                        noDataMessage.style.display = 'none';
+                        if (table) table.style.display = 'table'; // Tampilkan tabel jika ada data
+                    }
+                } else {
+                    // Jika noDataMessage tidak ada, pastikan tabel disembunyikan jika tidak ada baris
+                    if (table) {
+                        table.style.display = (rowsFound === 0) ? 'none' : 'table';
+                    }
+                }
+            }
+
+            // Tambahkan event listener untuk input pencarian
+            if (searchInput) {
+                searchInput.addEventListener('keyup', applyFilters);
+            }
+            
+            // Tambahkan event listener untuk filter jurusan
+            if (jurusanFilter) {
+                jurusanFilter.addEventListener('change', applyFilters);
+            }
+
+            // Panggil filter saat halaman dimuat untuk menerapkan filter awal jika ada
+            applyFilters();
+
+            // === Fungsionalitas Hapus Data ===
+            if (tableBody) {
+                tableBody.addEventListener('click', async function(event) {
+                    // Cek apakah yang diklik adalah tombol hapus
+                    if (event.target.classList.contains('btn-delete')) {
+                        const studentId = event.target.dataset.id;
+                        
+                        // Konfirmasi penghapusan (HARUS DIGANTI DENGAN MODAL KUSTOM DI LINGKUNGAN PRODUKSI)
+                        if (window.confirm(`Apakah Anda yakin ingin menghapus mahasiswa dengan ID ${studentId}?`)) {
+                            try {
+                                // Kirim permintaan DELETE ke server
+                                // Anda perlu mengimplementasikan endpoint Flask ini di backend Anda
+                                // Contoh: @app.route('/delete_mahasiswa/<int:id>', methods=['DELETE'])
+                                const response = await fetch(`/delete_mahasiswa/${studentId}`, {
+                                    method: 'DELETE',
+                                    headers: {
+                                        'Content-Type': 'application/json'
+                                    }
+                                });
+
+                                if (response.ok) {
+                                    // Hapus baris dari DOM jika penghapusan berhasil
+                                    const rowToRemove = event.target.closest('tr');
+                                    if (rowToRemove) {
+                                        rowToRemove.remove();
+                                        // Perbarui allTableRows setelah penghapusan
+                                        const index = allTableRows.indexOf(rowToRemove);
+                                        if (index > -1) {
+                                            allTableRows.splice(index, 1);
+                                        }
+                                        applyFilters(); 
+                                    }
+                                    console.log(`Mahasiswa dengan ID ${studentId} berhasil dihapus.`);
+                                } else {
+                                    const errorData = await response.json();
+                                    console.error('Gagal menghapus mahasiswa:', errorData.message);
+                                    alert('Gagal menghapus mahasiswa: ' + errorData.message); 
+                                }
+                            } catch (error) {
+                                console.error('Terjadi kesalahan jaringan:', error);
+                                alert('Terjadi kesalahan jaringan saat menghapus data.'); 
+                            }
+                        }
+                    }
+                });
+            }
+        });
+    </script>
 </body>
 </html>
