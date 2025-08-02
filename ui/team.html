@@ -10,234 +10,98 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;900&display=swap" rel="stylesheet">
     <style>
-        body {
-            font-family: 'Inter', sans-serif;
-            background-color: #f0f4f8;
+        body { font-family: 'Inter', sans-serif; background-color: #f0f4f8; }
+        .chart-container { position: relative; width: 100%; max-width: 600px; margin: auto; height: 300px; max-height: 400px; }
+        @media (min-width: 768px) { .chart-container { height: 350px; } }
+        .gradient-text { background: linear-gradient(90deg, #00A6ED, #7FB800); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        .card { background-color: white; border-radius: 0.75rem; box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1); padding: 1.5rem; margin-bottom: 2rem; transition: transform 0.3s ease; }
+        .card:hover { transform: translateY(-5px); box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1); }
+        .flow-arrow { font-size: 2rem; color: #00A6ED; font-weight: bold; display: flex; align-items: center; justify-content: center; margin: 1rem 0; }
+         .btn-back-red {
+            background-color: #EF4444; 
+            color: #FFFFFF;
+            border: 1px solid #DC2626;
+            box-shadow: 0 5px 10px rgba(239, 68, 68, 0.3);
+            transition: all 0.3s ease-in-out;
         }
-        .chart-container {
-            position: relative;
-            width: 100%;
-            max-width: 600px;
-            margin-left: auto;
-            margin-right: auto;
-            height: 300px;
-            max-height: 400px;
-        }
-        @media (min-width: 768px) {
-            .chart-container {
-                height: 350px;
-            }
-        }
-        .gradient-text {
-            background: linear-gradient(90deg, #00A6ED, #7FB800);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-        }
-        .card {
-            background-color: white;
-            border-radius: 0.75rem;
-            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
-            padding: 1.5rem;
-            margin-bottom: 2rem;
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
-        }
-        .card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
-        }
-        .kpi-value {
-            font-weight: 900;
-            font-size: 3rem;
-            line-height: 1;
-        }
-        .flow-arrow {
-            font-size: 2rem;
-            color: #00A6ED;
-            font-weight: bold;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            margin: 1rem 0;
+        .btn-back-red:hover {
+            background-color: #DC2626;
+            transform: translateY(-1px);
+            box-shadow: 0 8px 15px rgba(239, 68, 68, 0.4);
         }
     </style>
 </head>
 <body class="text-[#2D3142]">
+<div class="container mx-auto p-4 md:p-8">
 
-    <div class="container mx-auto p-4 md:p-8">
-
-        <header class="text-center mb-12">
-            <h1 class="text-4xl md:text-6xl font-black mb-2 gradient-text">Memilih Jurusan dengan Tepat</h1>
-            <p class="text-lg md:text-xl max-w-3xl mx-auto text-gray-600">Menggunakan Sistem Pendukung Keputusan (SPK) untuk menemukan jurusan yang paling sesuai berdasarkan minat dan kemampuan.</p>
-        </header>
-
-        <main>
-            <section id="alternatives" class="mb-16">
-                <div class="card text-center">
-                    <h2 class="text-3xl font-bold mb-4">Empat Pilihan Karir Masa Depan</h2>
-                    <p class="max-w-2xl mx-auto mb-8 text-gray-500">Seorang calon mahasiswa dihadapkan pada empat pilihan jurusan populer di bidang teknologi. Masing-masing memiliki jalur karir yang unik dan membutuhkan keahlian yang berbeda.</p>
-                    <div class="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-6">
-                        <div class="p-4 bg-gray-50 rounded-lg border border-gray-200">
-                            <div class="text-4xl mb-2">🌐</div>
-                            <h3 class="font-bold text-lg">Web Developer</h3>
-                        </div>
-                        <div class="p-4 bg-gray-50 rounded-lg border border-gray-200">
-                            <div class="text-4xl mb-2">📱</div>
-                            <h3 class="font-bold text-lg">Mobile Developer</h3>
-                        </div>
-                        <div class="p-4 bg-gray-50 rounded-lg border border-gray-200">
-                            <div class="text-4xl mb-2">📊</div>
-                            <h3 class="font-bold text-lg">Data Analyst</h3>
-                        </div>
-                        <div class="p-4 bg-gray-50 rounded-lg border border-gray-200">
-                            <div class="text-4xl mb-2">🎮</div>
-                            <h3 class="font-bold text-lg">Game Developer</h3>
-                        </div>
-                    </div>
-                </div>
-            </section>
-
-            <section id="criteria" class="mb-16">
-                 <div class="grid grid-cols-1 md:grid-cols-2 gap-8 items-center">
-                    <div class="card">
-                        <h2 class="text-3xl font-bold mb-4">Kriteria Penilaian</h2>
-                        <p class="text-gray-500 mb-6">Keputusan didasarkan pada empat kriteria kunci. Setiap kriteria memiliki "bobot" atau tingkat kepentingan yang berbeda, yang mencerminkan prioritas institusi dalam menilai potensi mahasiswa.</p>
-                        <ul class="space-y-3 text-gray-700">
-                            <li class="flex items-center"><span class="w-4 h-4 rounded-full mr-3" style="background-color: #00A6ED;"></span><strong>Logika Pemrograman:</strong> 30%</li>
-                            <li class="flex items-center"><span class="w-4 h-4 rounded-full mr-3" style="background-color: #FFB400;"></span><strong>Desain UI/UX:</strong> 20%</li>
-                            <li class="flex items-center"><span class="w-4 h-4 rounded-full mr-3" style="background-color: #7FB800;"></span><strong>Matematika Dasar:</strong> 25%</li>
-                            <li class="flex items-center"><span class="w-4 h-4 rounded-full mr-3" style="background-color: #F6511D;"></span><strong>Minat Bidang:</strong> 25%</li>
-                        </ul>
-                    </div>
-                    <div class="card">
-                        <h3 class="text-xl font-bold text-center mb-4">Distribusi Bobot Kriteria</h3>
-                        <div class="chart-container h-64 md:h-80">
-                            <canvas id="criteriaChart"></canvas>
-                        </div>
-                    </div>
-                </div>
-            </section>
-            
-            <section id="profile" class="mb-16">
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-8 items-center">
-                    <div class="card">
-                        <h3 class="text-xl font-bold text-center mb-4">Profil Kemampuan Kandidat</h3>
-                         <div class="chart-container h-80">
-                            <canvas id="profileRadarChart"></canvas>
-                        </div>
-                    </div>
-                    <div class="card">
-                        <h2 class="text-3xl font-bold mb-4">Skor Awal Kandidat</h2>
-                        <p class="text-gray-500 mb-6">Ini adalah nilai mentah kandidat untuk setiap jurusan berdasarkan kriteria yang ada. Grafik radar di samping memberikan gambaran visual tentang kekuatan dan kelemahan kandidat untuk setiap pilihan.</p>
-                        <div class="overflow-x-auto">
-                            <table class="min-w-full bg-white text-sm">
-                                <thead class="bg-gray-100">
-                                    <tr>
-                                        <th class="text-left font-semibold p-3">Jurusan</th>
-                                        <th class="text-center font-semibold p-3">Logika</th>
-                                        <th class="text-center font-semibold p-3">UI/UX</th>
-                                        <th class="text-center font-semibold p-3">Matematika</th>
-                                        <th class="text-center font-semibold p-3">Minat</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <tr class="border-b">
-                                        <td class="p-3 font-medium">Web Dev</td>
-                                        <td class="text-center p-3">80</td>
-                                        <td class="text-center p-3">90</td>
-                                        <td class="text-center p-3">70</td>
-                                        <td class="text-center p-3">4</td>
-                                    </tr>
-                                    <tr class="border-b">
-                                        <td class="p-3 font-medium">Mobile Dev</td>
-                                        <td class="text-center p-3">75</td>
-                                        <td class="text-center p-3">85</td>
-                                        <td class="text-center p-3">65</td>
-                                        <td class="text-center p-3">5</td>
-                                    </tr>
-                                    <tr class="border-b">
-                                        <td class="p-3 font-medium">Data Analyst</td>
-                                        <td class="text-center p-3">90</td>
-                                        <td class="text-center p-3">70</td>
-                                        <td class="text-center p-3">90</td>
-                                        <td class="text-center p-3">3</td>
-                                    </tr>
-                                    <tr>
-                                        <td class="p-3 font-medium">Game Dev</td>
-                                        <td class="text-center p-3">85</td>
-                                        <td class="text-center p-3">95</td>
-                                        <td class="text-center p-3">75</td>
-                                        <td class="text-center p-3">5</td>
-                                    </tr>
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
-                </div>
-            </section>
-
-            <section id="process" class="mb-16">
-                <div class="card text-center">
-                    <h2 class="text-3xl font-bold mb-4">Bagaimana Keputusan Dibuat?</h2>
-                    <p class="max-w-3xl mx-auto mb-8 text-gray-500">Metode SAW (Simple Additive Weighting) digunakan untuk mengolah data. Proses ini mengubah skor mentah menjadi skor akhir yang dapat diperbandingkan melalui dua langkah utama: Normalisasi dan Pembobotan.</p>
-                    <div class="flex flex-col md:flex-row justify-center items-center gap-4">
-                        <div class="p-6 bg-gray-50 rounded-lg border border-gray-200 w-full md:w-1/3">
-                            <h3 class="font-bold text-xl mb-2 text-[#00A6ED]">Langkah 1: Normalisasi</h3>
-                            <p class="text-sm">Setiap skor mentah diubah menjadi skala 0-1 dengan membaginya dengan skor maksimum di kriterianya. Ini memastikan semua kriteria diperlakukan secara adil.</p>
-                        </div>
-                        <div class="flow-arrow">➡️</div>
-                        <div class="p-6 bg-gray-50 rounded-lg border border-gray-200 w-full md:w-1/3">
-                            <h3 class="font-bold text-xl mb-2 text-[#7FB800]">Langkah 2: Pembobotan & Penjumlahan</h3>
-                            <p class="text-sm">Skor yang telah dinormalisasi dikalikan dengan bobot kriterianya, lalu dijumlahkan untuk mendapatkan skor akhir setiap jurusan.</p>
-                        </div>
-                    </div>
-                </div>
-            </section>
-
-            <section id="results" class="mb-16">
-                <div class="card">
-                    <h2 class="text-3xl font-bold text-center mb-2">Hasil Akhir dan Peringkat</h2>
-                    <p class="text-center max-w-2xl mx-auto mb-8 text-gray-500">Setelah melalui proses perhitungan, setiap jurusan mendapatkan skor akhir. Jurusan dengan skor tertinggi menjadi rekomendasi utama.</p>
-                    <div class="w-full max-w-4xl mx-auto">
-                         <div class="chart-container h-96">
-                            <canvas id="resultsChart"></canvas>
-                        </div>
-                    </div>
-                </div>
-            </section>
-
-            <section id="conclusion" class="text-center">
-                 <div class="card bg-gradient-to-r from-[#00A6ED] to-[#7FB800] text-white">
-                    <h2 class="text-3xl font-bold mb-4">Rekomendasi Terbaik: Game Developer</h2>
-                    <p class="text-xl mb-4">Dengan skor akhir tertinggi sebesar <span class="font-black text-2xl">0.941</span>, jurusan Game Developer adalah pilihan yang paling sesuai untuk kandidat ini.</p>
-                    <p class="max-w-3xl mx-auto opacity-90">Penggunaan SPK memberikan dasar keputusan yang objektif, transparan, dan berbasis data. Ini membantu institusi dan mahasiswa membuat pilihan yang lebih tepat, meningkatkan peluang keberhasilan akademik dan kepuasan di masa depan.</p>
-                </div>
-            </section>
-
-        </main>
+     <div class="flex justify-end mb-8">
+            <a href="/" class="btn-back-red inline-block font-bold py-2 px-4 rounded-lg transition-colors duration-200">Kembali</a>
     </div>
+    <header class="text-center mb-12">
+        <h1 class="text-4xl md:text-6xl font-black mb-2 gradient-text">Memilih Jurusan dengan Tepat</h1>
+        <p class="text-lg md:text-xl max-w-3xl mx-auto text-gray-600">Menggunakan SPK untuk menemukan jurusan paling sesuai berdasarkan minat dan kemampuan.</p>
+    </header>
 
-    <script>
-        const tooltipTitleCallback = (tooltipItems) => {
-            const item = tooltipItems[0];
-            let label = item.chart.data.labels[item.dataIndex];
-            if (Array.isArray(label)) {
-                return label.join(' ');
-            }
-            return label;
-        };
+    <section id="results" class="mb-16">
+        <div class="card">
+            <h2 class="text-3xl font-bold text-center mb-2">Hasil Akhir dan Peringkat</h2>
+            <p class="text-center max-w-2xl mx-auto mb-8 text-gray-500">Setelah perhitungan SAW, setiap jurusan mendapatkan skor akhir. Jurusan dengan skor tertinggi menjadi rekomendasi utama.</p>
+            <div class="w-full max-w-4xl mx-auto">
+                <div class="chart-container h-96">
+                    <canvas id="resultsChart"></canvas>
+                </div>
+            </div>
+        </div>
+    </section>
 
-        const commonPlugins = {
-            legend: {
-                position: 'bottom',
-                labels: {
-                    font: {
-                        family: 'Inter',
-                        size: 12
-                    },
-                    color: '#2D3142',
-                    padding: 20
-                }
-            },
+    <section id="conclusion" class="text-center">
+        <div class="card bg-gradient-to-r from-[#00A6ED] to-[#7FB800] text-white">
+            <h2 class="text-3xl font-bold mb-4">Rekomendasi Terbaik: {{ rekomendasi_terbaik }}</h2>
+            <p class="text-xl mb-4">Dengan skor akhir tertinggi sebesar <span class="font-black text-2xl">{{ '{:.3f}'.format(nilai_tertinggi) }}</span>, jurusan {{ rekomendasi_terbaik }} adalah pilihan paling sesuai.</p>
+            <p class="max-w-3xl mx-auto opacity-90">SPK memberikan dasar keputusan yang objektif dan berbasis data. Membantu mahasiswa memilih dengan tepat untuk masa depan yang lebih cerah.</p>
+        </div>
+    </section>
+</div>
+
+<script>
+const wrapLabel = (label, maxWidth) => {
+    const words = label.split(' ');
+    const lines = [];
+    let currentLine = '';
+    for (const word of words) {
+        if ((currentLine + word).length < maxWidth) {
+            currentLine += `${word} `;
+        } else {
+            lines.push(currentLine.trim());
+            currentLine = `${word} `;
+        }
+    }
+    lines.push(currentLine.trim());
+    return lines;
+};
+
+const resultsData = {
+    labels: {{ nama_jurusan | tojson }}.map(l => wrapLabel(l, 16)),
+    datasets: [{
+        label: 'Skor Akhir',
+        data: {{ skor_akhir | tojson }},
+        backgroundColor: ['#7FB800','#00A6ED','#FFB400','#F6511D'],
+        borderColor: ['#6a9c00','#008bc7','#d99a00','#d04518'],
+        borderWidth: 2,
+        borderRadius: 8,
+        borderSkipped: false
+    }]
+};
+
+new Chart(document.getElementById('resultsChart'), {
+    type: 'bar',
+    data: resultsData,
+    options: {
+        indexAxis: 'y',
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: {
+            legend: { display: false },
             tooltip: {
                 enabled: true,
                 backgroundColor: '#2D3142',
@@ -246,197 +110,26 @@
                 padding: 12,
                 cornerRadius: 8,
                 callbacks: {
-                    title: tooltipTitleCallback
+                    label: function(context) {
+                        return `Skor: ${context.raw.toFixed(3)}`;
+                    }
                 }
             }
-        };
-
-        const wrapLabel = (label, maxWidth) => {
-            const words = label.split(' ');
-            const lines = [];
-            let currentLine = '';
-            for (const word of words) {
-                if ((currentLine + word).length < maxWidth) {
-                    currentLine += `${word} `;
-                } else {
-                    lines.push(currentLine.trim());
-                    currentLine = `${word} `;
-                }
+        },
+        scales: {
+            x: {
+                beginAtZero: true,
+                max: 1.0,
+                ticks: { color: '#2D3142', font: { family: 'Inter' } },
+                grid: { color: 'rgba(45,49,66,0.1)' }
+            },
+            y: {
+                ticks: { color: '#2D3142', font: { family: 'Inter', size: 14, weight: '600' } },
+                grid: { display: false }
             }
-            lines.push(currentLine.trim());
-            return lines;
         }
-        
-        const criteriaData = {
-            labels: ['Logika Pemrograman (30%)', 'Desain UI/UX (20%)', 'Matematika Dasar (25%)', 'Minat Bidang (25%)'],
-            datasets: [{
-                label: 'Distribusi Bobot',
-                data: [30, 20, 25, 25],
-                backgroundColor: ['#00A6ED', '#FFB400', '#7FB800', '#F6511D'],
-                borderColor: '#ffffff',
-                borderWidth: 2,
-                hoverOffset: 4
-            }]
-        };
-
-        new Chart(document.getElementById('criteriaChart'), {
-            type: 'doughnut',
-            data: criteriaData,
-            options: {
-                responsive: true,
-                maintainAspectRatio: false,
-                plugins: commonPlugins,
-                cutout: '60%'
-            }
-        });
-
-        const profileData = {
-            labels: ['Logika', 'UI/UX', 'Matematika', 'Minat'],
-            datasets: [
-                {
-                    label: 'Web Developer',
-                    data: [80, 90, 70, 4*20],
-                    borderColor: '#00A6ED',
-                    backgroundColor: 'rgba(0, 166, 237, 0.2)',
-                    pointBackgroundColor: '#00A6ED',
-                    pointBorderColor: '#fff',
-                    pointHoverBackgroundColor: '#fff',
-                    pointHoverBorderColor: '#00A6ED'
-                },
-                {
-                    label: 'Mobile Developer',
-                    data: [75, 85, 65, 5*20],
-                    borderColor: '#7FB800',
-                    backgroundColor: 'rgba(127, 184, 0, 0.2)',
-                    pointBackgroundColor: '#7FB800',
-                    pointBorderColor: '#fff',
-                    pointHoverBackgroundColor: '#fff',
-                    pointHoverBorderColor: '#7FB800'
-                },
-                {
-                    label: 'Data Analyst',
-                    data: [90, 70, 90, 3*20],
-                    borderColor: '#FFB400',
-                    backgroundColor: 'rgba(255, 180, 0, 0.2)',
-                    pointBackgroundColor: '#FFB400',
-                    pointBorderColor: '#fff',
-                    pointHoverBackgroundColor: '#fff',
-                    pointHoverBorderColor: '#FFB400'
-                },
-                {
-                    label: 'Game Developer',
-                    data: [85, 95, 75, 5*20],
-                    borderColor: '#F6511D',
-                    backgroundColor: 'rgba(246, 81, 29, 0.2)',
-                    pointBackgroundColor: '#F6511D',
-                    pointBorderColor: '#fff',
-                    pointHoverBackgroundColor: '#fff',
-                    pointHoverBorderColor: '#F6511D'
-                }
-            ]
-        };
-        
-        new Chart(document.getElementById('profileRadarChart'), {
-            type: 'radar',
-            data: profileData,
-            options: {
-                responsive: true,
-                maintainAspectRatio: false,
-                plugins: commonPlugins,
-                scales: {
-                    r: {
-                        angleLines: { color: 'rgba(45, 49, 66, 0.1)' },
-                        grid: { color: 'rgba(45, 49, 66, 0.1)' },
-                        pointLabels: { font: { size: 12, family: 'Inter' }, color: '#2D3142' },
-                        ticks: {
-                            backdropColor: 'rgba(240, 244, 248, 0.5)',
-                            color: '#2D3142',
-                            font: { family: 'Inter' }
-                        },
-                         min: 0,
-                         max: 100
-                    }
-                }
-            }
-        });
-
-        const resultsData = {
-            labels: ['Game Developer', 'Mobile Developer', 'Web Developer', 'Data Analyst'].map(l => wrapLabel(l, 16)),
-            datasets: [{
-                label: 'Skor Akhir',
-                data: [0.941, 0.859, 0.851, 0.847],
-                backgroundColor: [
-                    '#7FB800',
-                    '#00A6ED',
-                    '#FFB400',
-                    '#F6511D'
-                ],
-                borderColor: [
-                    '#6a9c00',
-                    '#008bc7',
-                    '#d99a00',
-                    '#d04518'
-                ],
-                borderWidth: 2,
-                borderRadius: 8,
-                borderSkipped: false,
-            }]
-        };
-
-        new Chart(document.getElementById('resultsChart'), {
-            type: 'bar',
-            data: resultsData,
-            options: {
-                indexAxis: 'y',
-                responsive: true,
-                maintainAspectRatio: false,
-                plugins: {
-                    legend: { display: false },
-                    tooltip: {
-                        enabled: true,
-                        backgroundColor: '#2D3142',
-                        titleFont: { family: 'Inter', weight: 'bold', size: 14 },
-                        bodyFont: { family: 'Inter', size: 12 },
-                        padding: 12,
-                        cornerRadius: 8,
-                        callbacks: {
-                            title: tooltipTitleCallback,
-                            label: function(context) {
-                                return `Skor: ${context.raw.toFixed(3)}`;
-                            }
-                        }
-                    }
-                },
-                scales: {
-                    x: {
-                        beginAtZero: true,
-                        grid: {
-                            display: true,
-                            color: 'rgba(45, 49, 66, 0.1)'
-                        },
-                        ticks: {
-                            color: '#2D3142',
-                            font: { family: 'Inter' }
-                        },
-                        max: 1.0
-                    },
-                    y: {
-                        grid: {
-                            display: false
-                        },
-                        ticks: {
-                            color: '#2D3142',
-                            font: {
-                                family: 'Inter',
-                                size: 14,
-                                weight: '600'
-                            }
-                        }
-                    }
-                }
-            }
-        });
-
-    </script>
+    }
+});
+</script>
 </body>
 </html>

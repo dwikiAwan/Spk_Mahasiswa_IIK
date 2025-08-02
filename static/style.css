@@ -35,7 +35,7 @@ input[type="number"] {
 
 button,
 .button {
-    /* Menambahkan .button di sini */
+
     background-color: #007bff;
     color: white;
     padding: 12px 20px;
@@ -45,9 +45,9 @@ button,
     font-size: 16px;
     margin-top: 20px;
     text-decoration: none;
-    /* Untuk link agar tidak ada garis bawah */
+ 
     display: inline-block;
-    /* Agar bisa diatur padding dan margin seperti tombol */
+  
 }
 
 .result {

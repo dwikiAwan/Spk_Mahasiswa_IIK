@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Penjurusan Mahasiswa Baru</title>
+    <title>Assessment Kemampuan - SPK Penjurusan</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -11,150 +11,654 @@
     <style>
         body {
             font-family: 'Inter', sans-serif;
-            color: #2D3142; /* Warna teks gelap standar */
+            color: #2D3142;
             margin: 0;
             padding: 0;
-            overflow: hidden; /* Mencegah body memiliki scrollbar */
+            overflow-y: auto;
             display: flex;
             justify-content: center;
-            align-items: center;
+            align-items: flex-start;
             min-height: 100vh;
-            position: relative; /* Diperlukan untuk penempatan video */
-            background-color: #f0f4f8; /* Fallback background color */
+            position: relative;
+            background-color: #f0f4f8;
+            padding-top: 2rem;
         }
-        /* Gaya untuk video latar belakang */
         #background-video {
-            position: absolute;
+            position: fixed;
             top: 50%;
             left: 50%;
             min-width: 100%;
             min-height: 100%;
             width: auto;
             height: auto;
-            z-index: -1; /* Menempatkan video di belakang konten */
+            z-index: -1;
             transform: translateX(-50%) translateY(-50%);
             background-size: cover;
-            filter: brightness(60%); /* Membuat video sedikit lebih gelap agar teks lebih mudah dibaca */
+            filter: brightness(60%);
         }
         .card-standard {
-            background: rgba(255, 255, 255, 0.85); /* Latar belakang kartu putih semi-transparan */
-            backdrop-filter: blur(5px); /* Efek blur ringan untuk kedalaman */
-            border: 1px solid rgba(226, 232, 240, 0.5); /* Border halus semi-transparan */
-            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1); /* Bayangan standar */
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(226, 232, 240, 0.5);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
             transition: all 0.3s ease-in-out;
         }
         .card-standard:hover {
             box-shadow: 0 15px 30px rgba(0, 0, 0, 0.15);
-            transform: translateY(-3px); /* Efek sedikit mengangkat saat hover */
         }
-        .input-standard {
-            background-color: #FFFFFF; /* Latar belakang input putih */
-            border: 1px solid #CBD5E0; /* Border input abu-abu */
-            color: #2D3142; /* Warna teks input gelap */
-            transition: all 0.2s ease-in-out;
+        .step-indicator {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-bottom: 2rem;
+            flex-wrap: wrap;
         }
-        .input-standard:focus {
-            border-color: #4299E1; /* Warna border fokus biru */
-            box-shadow: 0 0 0 3px rgba(66, 153, 225, 0.3); /* Efek glow ringan saat fokus */
+        .step {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            margin: 0.5rem;
+            transition: all 0.3s ease;
+            font-size: 0.9rem;
         }
-        .btn-primary-standard {
-            background-color: #4299E1; /* Warna biru standar untuk tombol utama */
-            color: #FFFFFF;
+        .step.active {
+            background-color: #4299E1;
+            color: white;
+        }
+        .step.completed {
+            background-color: #10B981;
+            color: white;
+        }
+        .step.inactive {
+            background-color: #E5E7EB;
+            color: #6B7280;
+        }
+        .step-line {
+            width: 30px;
+            height: 2px;
+            background-color: #E5E7EB;
+            margin: 0 0.5rem;
+        }
+        .step-line.active {
+            background-color: #10B981;
+        }
+        .hidden {
+            display: none;
+        }
+        .question-card {
+            background: rgba(255, 255, 255, 0.9);
+            border: 2px solid #E5E7EB;
+            border-radius: 12px;
+            padding: 2rem;
+            margin-bottom: 1.5rem;
+            transition: all 0.3s ease;
+        }
+        .question-card.active {
+            border-color: #4299E1;
+            box-shadow: 0 8px 15px rgba(66, 153, 225, 0.2);
+        }
+        .option-button {
+            background: #F8FAFC;
+            border: 2px solid #E2E8F0;
+            border-radius: 8px;
+            padding: 1rem;
+            margin: 0.5rem 0;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-align: left;
+            width: 100%;
+        }
+        .option-button:hover {
+            border-color: #4299E1;
+            background: #EBF8FF;
+        }
+        .option-button.selected {
+            border-color: #10B981;
+            background: #D1FAE5;
+            color: #065F46;
+        }
+        .btn-primary {
+            background-color: #4299E1;
+            color: white;
+            padding: 0.75rem 2rem;
             border: none;
-            box-shadow: 0 5px 10px rgba(66, 153, 225, 0.3); /* Bayangan tombol */
-            transition: all 0.3s ease-in-out;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
         }
-        .btn-primary-standard:hover {
-            background-color: #3182CE; /* Warna biru lebih gelap saat hover */
-            box-shadow: 0 8px 15px rgba(66, 153, 225, 0.4);
-            transform: translateY(-1px); /* Efek sedikit mengangkat saat hover */
+        .btn-primary:hover {
+            background-color: #3182CE;
+            transform: translateY(-2px);
         }
-        .btn-secondary-standard {
-            background-color: #EF4444; /* Warna merah untuk tombol sekunder */
-            color: #FFFFFF; /* Warna teks putih untuk kontras */
-            border: 1px solid #DC2626; /* Border merah gelap */
-            box-shadow: 0 5px 10px rgba(239, 68, 68, 0.3); /* Bayangan merah */
-            transition: all 0.3s ease-in-out;
+        .btn-primary:disabled {
+            background-color: #9CA3AF;
+            cursor: not-allowed;
+            transform: none;
         }
-        .btn-secondary-standard:hover {
-            background-color: #DC2626; /* Warna merah lebih gelap saat hover */
-            transform: translateY(-1px);
-            box-shadow: 0 8px 15px rgba(239, 68, 68, 0.4);
+        .btn-secondary {
+            background-color: #6B7280;
+            color: white;
+            padding: 0.75rem 2rem;
+            border: none;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
         }
-        h1, h2 {
-            color: #2D3142; /* Warna judul gelap standar */
-            text-shadow: none; /* Menghapus efek glow */
+        .btn-secondary:hover {
+            background-color: #4B5563;
         }
-        label {
-            color: #2D3142; /* Warna label gelap standar */
+        .btn-back-red {
+            background-color: #EF4444; /* Warna merah */
+            color: #FFFFFF;
+            padding: 12px 25px;
+            border: 1px solid #DC2626;
+            border-radius: 20px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            box-shadow: 0 5px 15px rgba(239, 68, 68, 0.3);
+        }
+        .btn-back-red:hover {
+            background-color: #DC2626;
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(239, 68, 68, 0.4);
+        }
+        .text-with-shadow {
+            text-shadow: 2px 2px 4px rgba(255, 255, 255, 0.5);
+        }
+        .progress-bar {
+            width: 100%;
+            height: 8px;
+            background-color: #E5E7EB;
+            border-radius: 4px;
+            overflow: hidden;
+            margin-bottom: 2rem;
+        }
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #10B981, #34D399);
+            border-radius: 4px;
+            transition: width 0.5s ease;
+        }
+        .category-score {
+            background: #F0F9FF;
+            border: 1px solid #BAE6FD;
+            border-radius: 8px;
+            padding: 1rem;
+            margin: 0.5rem 0;
+        }
+        .final-form {
+            background: #FFFBEB;
+            border: 2px solid #FCD34D;
+            border-radius: 12px;
+            padding: 2rem;
         }
     </style>
 </head>
-<body class="text-[#2D3142]">
-
-    <!-- Video latar belakang -->
+<body>
     <video autoplay loop muted playsinline id="background-video">
         <source src="{{ url_for('static', filename='bgtwo.mp4') }}" type="video/mp4">
         Your browser does not support the video tag.
     </video>
 
-    <!-- Kontainer utama yang memusatkan konten secara vertikal dan horizontal -->
-    <div class="container mx-auto p-4 md:p-8 flex flex-col items-center justify-center min-h-screen relative z-10">
-        <!-- Kartu standar yang berisi formulir -->
-        <div class="card-standard p-6 md:p-8 rounded-xl w-full max-w-2xl text-center">
-            <!-- Judul utama aplikasi -->
-            <h1 class="text-2xl sm:text-2xl font-bold mb-5">Sistem Pendukung Keputusan Penjurusan Mahasiswa</h1>
+    <div class="container mx-auto p-4 md:p-8 flex flex-col items-center justify-start min-h-screen relative z-10">
+        
+        <div class="step-indicator mb-8">
+            <div class="step active" id="step-intro">📋</div>
+            <div class="step-line" id="line1"></div>
+            <div class="step inactive" id="step-logic">🧠</div>
+            <div class="step-line" id="line2"></div>
+            <div class="step inactive" id="step-design">🎨</div>
+            <div class="step-line" id="line3"></div>
+            <div class="step inactive" id="step-math">📊</div>
+            <div class="step-line" id="line4"></div>
+            <div class="step inactive" id="step-interest">❤️</div>
+            <div class="step-line" id="line5"></div>
+            <div class="step inactive" id="step-result">🎯</div>
+        </div>
+
+        <div id="intro-section" class="card-standard p-8 rounded-xl w-full max-w-4xl text-center">
+            <h1 class="text-3xl font-bold mb-6">🎓 Assessment Kemampuan dan Minat</h1>
             
-            <!-- Formulir input data mahasiswa -->
-            <form action="/calculate" method="post" class="space-y-4">
-                <!-- Input Nama Mahasiswa -->
-                <div class="text-left">
-                    <label for="nama" class="block text-sm font-semibold mb-1">Nama Mahasiswa:</label>
-                    <input type="text" id="nama" name="nama" required 
-                           class="input-standard rounded-lg w-full py-2 px-3 leading-tight focus:outline-none focus:shadow-outline">
+            <div class="bg-blue-50 p-6 rounded-lg mb-6">
+                <h2 class="text-xl font-bold mb-4">Bagaimana Assessment Ini Bekerja?</h2>
+                <div class="grid md:grid-cols-2 gap-6 text-left">
+                    <div>
+                        <h3 class="font-bold mb-2">📝 4 Kategori Penilaian:</h3>
+                        <ul class="text-sm space-y-1">
+                            <li>🧠 <strong>Logika Pemrograman</strong> - 5 soal</li>
+                            <li>🎨 <strong>Desain UI/UX</strong> - 5 soal</li>
+                            <li>📊 <strong>Matematika Dasar</strong> - 5 soal</li>
+                            <li>❤️ <strong>Minat & Preferensi</strong> - 5 pertanyaan</li>
+                        </ul>
+                    </div>
+                    <div>
+                        <h3 class="font-bold mb-2">⚡ Sistem Penilaian:</h3>
+                        <ul class="text-sm space-y-1">
+                            <li>✅ Setiap jawaban benar = 20 poin</li>
+                            <li>📊 Skor maksimal per kategori = 100</li>
+                            <li>🎯 Hasil otomatis menentukan jurusan terbaik</li>
+                            <li>⏱️ Estimasi waktu: 10-15 menit</li>
+                        </ul>
+                    </div>
                 </div>
-                
-                <!-- Sub-judul untuk bagian input nilai dan minat -->
-                <h2 class="text-xl sm:text-1xl font-bold mt-6 mb-4">Input Nilai dan Minat</h2>
-                
-                <!-- Input Nilai Logika Pemrograman -->
-                <div class="text-left">
-                    <label for="c1" class="block text-sm font-semibold mb-1">Nilai Logika Pemrograman (0-100):</label>
-                    <input type="number" id="c1" name="c1" min="0" max="100" required 
-                           class="input-standard rounded-lg w-full py-2 px-3 leading-tight focus:outline-none focus:shadow-outline">
-                </div>
-                <!-- Input Nilai Desain UI/UX -->
-                <div class="text-left">
-                    <label for="c2" class="block text-sm font-semibold mb-1">Nilai Desain UI/UX (0-100):</label>
-                    <input type="number" id="c2" name="c2" min="0" max="100" required 
-                           class="input-standard rounded-lg w-full py-2 px-3 leading-tight focus:outline-none focus:shadow-outline">
-                </div>
-                <!-- Input Nilai Matematika Dasar -->
-                <div class="text-left">
-                    <label for="c3" class="block text-sm font-semibold mb-1">Nilai Matematika Dasar (0-100):</label>
-                    <input type="number" id="c3" name="c3" min="0" max="100" required 
-                           class="input-standard rounded-lg w-full py-2 px-3 leading-tight focus:outline-none focus:shadow-outline">
-                </div>
-                <!-- Input Minat terhadap bidang -->
-                <div class="text-left">
-                    <label for="c4" class="block text-sm font-semibold mb-1">Minat terhadap bidang (1-5):</label>
-                    <input type="number" id="c4" name="c4" min="1" max="5" required 
-                           class="input-standard rounded-lg w-full py-2 px-3 leading-tight focus:outline-none focus:shadow-outline">
-                </div>
-                
-                <!-- Tombol untuk melihat rekomendasi -->
-                <button type="submit" 
-                        class="btn-primary-standard text-white font-bold py-2 px-4 rounded-lg focus:outline-none focus:shadow-outline w-full">
-                    Lihat Rekomendasi
+            </div>
+
+            <div class="bg-yellow-50 p-4 rounded-lg mb-6">
+                <p class="text-sm text-yellow-800">
+                    <strong>💡 Tips:</strong> Jawab dengan jujur dan sesuai kemampuan Anda saat ini. 
+                    Tidak apa-apa jika tidak tahu jawabannya - ini untuk mengetahui level Anda sekarang.
+                </p>
+            </div>
+
+            <div class="mb-6">
+                <label for="student-name" class="block text-lg font-semibold mb-2">Nama Lengkap:</label>
+                <input type="text" id="student-name" placeholder="Masukkan nama lengkap Anda" 
+                        class="w-full p-3 border border-gray-300 rounded-lg focus:border-blue-500 focus:outline-none">
+            </div>
+
+            <div class="flex flex-col gap-4">
+                <button onclick="startAssessment()" class="btn-primary text-lg">
+                    🚀 Mulai Assessment
                 </button>
-            </form>
+                <a href="/" class="btn-back-red text-lg text-white text-center">
+                    Home
+                </a>
+            </div>
+        </div>
+
+        <div id="logic-section" class="card-standard p-8 rounded-xl w-full max-w-4xl hidden">
+            <div class="progress-bar">
+                <div class="progress-fill" style="width: 20%"></div>
+            </div>
+            <h2 class="text-2xl font-bold mb-6 text-center">🧠 Logika Pemrograman (1/4)</h2>
+            <div id="logic-questions"></div>
+            <div class="flex justify-between mt-6">
+                <button onclick="previousSection('intro')" class="btn-secondary">← Kembali</button>
+                <button onclick="nextSection('design')" class="btn-primary" id="logic-next" disabled>Lanjut →</button>
+            </div>
+        </div>
+
+        <div id="design-section" class="card-standard p-8 rounded-xl w-full max-w-4xl hidden">
+            <div class="progress-bar">
+                <div class="progress-fill" style="width: 40%"></div>
+            </div>
+            <h2 class="text-2xl font-bold mb-6 text-center">🎨 Desain UI/UX (2/4)</h2>
+            <div id="design-questions"></div>
+            <div class="flex justify-between mt-6">
+                <button onclick="previousSection('logic')" class="btn-secondary">← Kembali</button>
+                <button onclick="nextSection('math')" class="btn-primary" id="design-next" disabled>Lanjut →</button>
+            </div>
+        </div>
+
+        <div id="math-section" class="card-standard p-8 rounded-xl w-full max-w-4xl hidden">
+            <div class="progress-bar">
+                <div class="progress-fill" style="width: 60%"></div>
+            </div>
+            <h2 class="text-2xl font-bold mb-6 text-center">📊 Matematika Dasar (3/4)</h2>
+            <div id="math-questions"></div>
+            <div class="flex justify-between mt-6">
+                <button onclick="previousSection('design')" class="btn-secondary">← Kembali</button>
+                <button onclick="nextSection('interest')" class="btn-primary" id="math-next" disabled>Lanjut →</button>
+            </div>
+        </div>
+
+        <div id="interest-section" class="card-standard p-8 rounded-xl w-full max-w-4xl hidden">
+            <div class="progress-bar">
+                <div class="progress-fill" style="width: 80%"></div>
+            </div>
+            <h2 class="text-2xl font-bold mb-6 text-center">❤️ Minat & Preferensi (4/4)</h2>
+            <div id="interest-questions"></div>
+            <div class="flex justify-between mt-6">
+                <button onclick="previousSection('math')" class="btn-secondary">← Kembali</button>
+                <button onclick="showResults()" class="btn-primary" id="interest-next" disabled>Lihat Hasil →</button>
+            </div>
+        </div>
+
+        <div id="result-section" class="card-standard p-8 rounded-xl w-full max-w-4xl hidden">
+            <div class="progress-bar">
+                <div class="progress-fill" style="width: 100%"></div>
+            </div>
+            <h2 class="text-2xl font-bold mb-6 text-center">🎯 Hasil Assessment Anda</h2>
             
-            <!-- Tautan kembali ke Landing Page -->
-            <a href="/" 
-               class="btn-secondary-standard inline-block mt-5 font-bold py-2 px-4 rounded-lg w-full md:w-auto">
-                Kembali ke Landing Page
-            </a>
+            <div id="score-summary" class="mb-6"></div>
+            
+            <div class="final-form">
+                <h3 class="text-xl font-bold mb-4 text-center">📋 Data untuk Sistem Rekomendasi</h3>
+                <form action="/calculate" method="post" id="final-form">
+                    <input type="hidden" id="final-nama" name="nama">
+                    <input type="hidden" id="final-c1" name="c1">
+                    <input type="hidden" id="final-c2" name="c2">
+                    <input type="hidden" id="final-c3" name="c3">
+                    <input type="hidden" id="final-c4" name="c4">
+                    
+                    <div class="text-center">
+                        <button type="submit" class="btn-primary text-lg">
+                            🔍 Dapatkan Rekomendasi Jurusan
+                        </button>
+                    </div>
+                </form>
+            </div>
         </div>
     </div>
+
+    <script>
+        // Quiz Data
+        const quizData = {
+            logic: [
+                {
+                    question: "Apa output dari pseudocode berikut?\n\nMULAI\na = 5\nb = 3\nc = a + b * 2\nTULIS c\nSELESAI",
+                    options: ["8", "11", "16", "13"],
+                    correct: 1
+                },
+                {
+                    question: "Dalam flowchart, simbol apa yang digunakan untuk menunjukkan proses pengambilan keputusan?",
+                    options: ["Persegi panjang", "Oval", "Belah ketupat", "Lingkaran"],
+                    correct: 2
+                },
+                {
+                    question: "Algoritma sorting mana yang paling efisien untuk data yang sudah hampir terurut?",
+                    options: ["Bubble Sort", "Quick Sort", "Insertion Sort", "Selection Sort"],
+                    correct: 2
+                },
+                {
+                    question: "Apa yang dimaksud dengan 'Big O Notation'?",
+                    options: ["Ukuran file program", "Kompleksitas waktu algoritma", "Jumlah variabel", "Ukuran memori"],
+                    correct: 1
+                },
+                {
+                    question: "Jika array [1,2,3,4,5] diakses dengan index -1 (dari belakang), hasilnya adalah:",
+                    options: ["Error", "1", "5", "4"],
+                    correct: 2
+                }
+            ],
+            design: [
+                {
+                    question: "Apa prinsip utama dalam desain UI/UX yang baik?",
+                    options: ["Banyak warna cerah", "User-centered design", "Animasi yang kompleks", "Font yang bervariasi"],
+                    correct: 1
+                },
+                {
+                    question: "Apa yang dimaksud dengan 'wireframe' dalam desain?",
+                    options: ["Prototype akhir", "Sketsa layout dasar", "Kode HTML", "Database design"],
+                    correct: 1
+                },
+                {
+                    question: "Prinsip kontras warna yang baik untuk aksesibilitas adalah:",
+                    options: ["Rasio kontras minimal 1:1", "Rasio kontras minimal 4.5:1", "Rasio kontras minimal 2:1", "Tidak ada aturan khusus"],
+                    correct: 1
+                },
+                {
+                    question: "Dalam responsive design, apa yang dimaksud dengan 'mobile-first approach'?",
+                    options: ["Desain hanya untuk mobile", "Desain dimulai dari layar kecil", "Mobile lebih penting", "Desktop tidak penting"],
+                    correct: 1
+                },
+                {
+                    question: "Tool mana yang paling populer untuk membuat prototype interaktif?",
+                    options: ["Microsoft Word", "Figma", "Excel", "Notepad"],
+                    correct: 1
+                }
+            ],
+            math: [
+                {
+                    question: "Berapakah nilai dari 2³ + 3² - 5?",
+                    options: ["12", "14", "16", "18"],
+                    correct: 0
+                },
+                {
+                    question: "Jika f(x) = 2x + 3, maka f(5) adalah:",
+                    options: ["10", "11", "13", "15"],
+                    correct: 2
+                },
+                {
+                    question: "Dalam statistik, apa yang dimaksud dengan 'median'?",
+                    options: ["Nilai terbesar", "Nilai tengah", "Nilai rata-rata", "Nilai terkecil"],
+                    correct: 1
+                },
+                {
+                    question: "Berapakah hasil dari log₂(8)?",
+                    options: ["2", "3", "4", "8"],
+                    correct: 1
+                },
+                {
+                    question: "Jika probabilitas hujan adalah 0.3, berapa probabilitas tidak hujan?",
+                    options: ["0.3", "0.7", "1.0", "0.5"],
+                    correct: 1
+                }
+            ],
+            interest: [
+                {
+                    question: "Seberapa sering Anda membaca artikel/berita tentang teknologi terbaru?",
+                    options: ["Tidak pernah", "Jarang (1-2x/bulan)", "Kadang (1-2x/minggu)", "Sering (hampir setiap hari)"],
+                    correct: null, 
+                    scores: [1, 2, 3, 4]
+                },
+                {
+                    question: "Ketika menghadapi gadget/aplikasi baru, reaksi Anda adalah:",
+                    options: ["Menghindari, terlalu rumit", "Menggunakan fitur dasar saja", "Tertarik mencoba fitur baru", "Excited dan langsung explore semua fitur"],
+                    correct: null,
+                    scores: [1, 2, 3, 4]
+                },
+                {
+                    question: "Apakah Anda pernah mencoba membuat sesuatu yang berhubungan dengan teknologi?",
+                    options: ["Tidak pernah sama sekali", "Pernah sekali-dua kali", "Beberapa kali sebagai hobi", "Sering, dan menikmatinya"],
+                    correct: null,
+                    scores: [1, 2, 3, 4]
+                },
+                {
+                    question: "Bagaimana perasaan Anda ketika harus belajar teknologi/software baru?",
+                    options: ["Stress dan menghindari", "Terpaksa jika memang perlu", "Cukup tertarik", "Senang dan excited"],
+                    correct: null,
+                    scores: [1, 2, 3, 4]
+                },
+                {
+                    question: "Seberapa nyaman Anda menghabiskan waktu di depan komputer untuk belajar/bekerja?",
+                    options: ["Tidak nyaman, cepat bosan", "1-2 jam masih ok", "3-4 jam tidak masalah", "Berjam-jam tanpa merasa bosan"],
+                    correct: null,
+                    scores: [1, 2, 3, 4]
+                }
+            ]
+        };
+
+   
+        let scores = {
+            logic: 0,
+            design: 0,
+            math: 0,
+            interest: 0
+        };
+        let userAnswers = {
+            logic: Array(quizData.logic.length).fill(null),
+            design: Array(quizData.design.length).fill(null),
+            math: Array(quizData.math.length).fill(null),
+            interest: Array(quizData.interest.length).fill(null)
+        };
+        let studentName = '';
+        let currentSection = 'intro';
+
+        document.addEventListener('DOMContentLoaded', () => {
+            generateQuestions('logic');
+            generateQuestions('design');
+            generateQuestions('math');
+            generateQuestions('interest');
+        });
+
+        function startAssessment() {
+            const nameInput = document.getElementById('student-name');
+            studentName = nameInput.value.trim();
+            if (!studentName) {
+                alert('Mohon isi nama lengkap terlebih dahulu!');
+                nameInput.focus();
+                return;
+            }
+            
+            document.getElementById('intro-section').classList.add('hidden');
+            document.getElementById('logic-section').classList.remove('hidden');
+            updateStepIndicator('logic');
+            currentSection = 'logic';
+        }
+
+        function generateQuestions(category) {
+            const container = document.getElementById(category + '-questions');
+            container.innerHTML = '';
+            quizData[category].forEach((q, index) => {
+                const questionDiv = document.createElement('div');
+                questionDiv.className = 'question-card';
+                questionDiv.innerHTML = `
+                    <h3 class="text-lg font-semibold mb-4">Soal ${index + 1}</h3>
+                    <p class="mb-4 whitespace-pre-line">${q.question}</p>
+                    <div class="options-container">
+                        ${q.options.map((option, optIndex) => `
+                            <button class="option-button" data-question-index="${index}" data-option-index="${optIndex}" onclick="selectAnswer('${category}', ${index}, ${optIndex})">
+                                ${String.fromCharCode(65 + optIndex)}. ${option}
+                            </button>
+                        `).join('')}
+                    </div>
+                `;
+                container.appendChild(questionDiv);
+            });
+        }
+
+        function selectAnswer(category, questionIndex, optionIndex) {
+            const questionDiv = document.querySelectorAll(`#${category}-questions .question-card`)[questionIndex];
+            const options = questionDiv.querySelectorAll('.option-button');
+            
+         
+            options.forEach(btn => btn.classList.remove('selected'));
+            
+            options[optionIndex].classList.add('selected');
+
+            userAnswers[category][questionIndex] = optionIndex;
+            
+       
+            calculateScore(category);
+
+          
+            const allAnswered = userAnswers[category].every(answer => answer !== null);
+            if (allAnswered) {
+                document.getElementById(category + '-next').disabled = false;
+            }
+        }
+
+        function calculateScore(category) {
+            let totalScore = 0;
+            userAnswers[category].forEach((answerIndex, questionIndex) => {
+                if (answerIndex !== null) {
+                    const question = quizData[category][questionIndex];
+                    if (question.correct !== null) { 
+                        if (answerIndex === question.correct) {
+                            totalScore += 20;
+                        }
+                    } else { 
+                        totalScore += question.scores[answerIndex] * 5;
+                    }
+                }
+            });
+            scores[category] = totalScore;
+        }
+
+        function nextSection(nextCat) {
+            const currentCat = currentSection;
+            document.getElementById(currentCat + '-section').classList.add('hidden');
+            document.getElementById(nextCat + '-section').classList.remove('hidden');
+            updateStepIndicator(nextCat);
+            currentSection = nextCat;
+        }
+
+        function previousSection(prevCat) {
+            const currentCat = currentSection;
+            document.getElementById(currentCat + '-section').classList.add('hidden');
+            document.getElementById(prevCat + '-section').classList.remove('hidden');
+            updateStepIndicator(prevCat);
+            currentSection = prevCat;
+        }
+
+        function showResults() {
+            document.getElementById('interest-section').classList.add('hidden');
+            document.getElementById('result-section').classList.remove('hidden');
+            updateStepIndicator('result');
+            currentSection = 'result';
+            displayScoreSummary();
+            populateFinalForm();
+        }
+
+        function updateStepIndicator(currentStep) {
+            const stepOrder = ['intro', 'logic', 'design', 'math', 'interest', 'result'];
+            const stepMap = {
+                'intro': 'step-intro', 'logic': 'step-logic', 'design': 'step-design',
+                'math': 'step-math', 'interest': 'step-interest', 'result': 'step-result'
+            };
+
+            stepOrder.forEach((step, index) => {
+                const stepElement = document.getElementById(stepMap[step]);
+                const lineElement = document.getElementById('line' + (index));
+
+                if (index < stepOrder.indexOf(currentStep)) {
+                    stepElement.classList.add('completed');
+                    stepElement.classList.remove('active', 'inactive');
+                    if (lineElement) lineElement.classList.add('active');
+                } else if (step === currentStep) {
+                    stepElement.classList.add('active');
+                    stepElement.classList.remove('completed', 'inactive');
+                    if (lineElement) lineElement.classList.remove('active');
+                } else {
+                    stepElement.classList.add('inactive');
+                    stepElement.classList.remove('active', 'completed');
+                    if (lineElement) lineElement.classList.remove('active');
+                }
+            });
+        }
+
+        function displayScoreSummary() {
+            const container = document.getElementById('score-summary');
+            
+            const categoryScores = [
+                { name: 'Logika Pemrograman', score: scores.logic, emoji: '🧠', major: 'Pengembangan Perangkat Lunak' },
+                { name: 'Desain UI/UX', score: scores.design, emoji: '🎨', major: 'Desain UI/UX' },
+                { name: 'Matematika Dasar', score: scores.math, emoji: '📊', major: 'Data Science' },
+                { name: 'Minat & Preferensi', score: scores.interest, emoji: '❤️', major: 'Berbagai Bidang Teknologi' }
+            ];
+
+            const maxScore = Math.max(...categoryScores.map(c => c.score));
+            const bestFitMajors = categoryScores.filter(c => c.score === maxScore);
+            
+            let recommendationText = '';
+            if (bestFitMajors.length === 1) {
+                recommendationText = `Berdasarkan hasil assessment, jurusan yang paling cocok untuk Anda adalah <strong>${bestFitMajors[0].major}</strong>.`;
+            } else if (bestFitMajors.length > 1) {
+                const majorNames = bestFitMajors.map(m => m.major).join(', ');
+                recommendationText = `Anda memiliki potensi kuat di beberapa bidang: <strong>${majorNames}</strong>.`;
+            } else {
+                recommendationText = 'Hasil assessment menunjukkan Anda memiliki potensi merata di berbagai bidang. Pertimbangkan minat pribadi Anda lebih dalam!';
+            }
+
+            container.innerHTML = `
+                <div class="bg-green-50 p-6 rounded-lg mb-6 text-center">
+                    <h3 class="text-xl font-bold text-green-800 mb-2">🎉 Hasil Terbaik Anda</h3>
+                    <p class="text-lg text-green-700">${recommendationText}</p>
+                </div>
+                <h3 class="text-xl font-bold mb-4 text-center">Rincian Skor Per Kategori</h3>
+                ${categoryScores.map(cat => `
+                    <div class="category-score flex justify-between items-center">
+                        <span class="font-semibold">${cat.emoji} ${cat.name}</span>
+                        <span class="text-2xl font-bold text-blue-600">${cat.score}</span>
+                    </div>
+                `).join('')}
+            `;
+        }
+
+        function populateFinalForm() {
+            document.getElementById('final-nama').value = studentName;
+            document.getElementById('final-c1').value = scores.logic;
+            document.getElementById('final-c2').value = scores.design;
+            document.getElementById('final-c3').value = scores.math;
+            document.getElementById('final-c4').value = scores.interest;
+        }
+    </script>
 </body>
 </html>
