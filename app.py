@@ -21,11 +21,11 @@ ALTERNATIVES = {
 }
 
 # PROFIL JURUSAN
-JURUSAN_PROFILES = {
-    'A1': {'c1': 80, 'c2': 90, 'c3': 70, 'c4': 4},
-    'A2': {'c1': 75, 'c2': 85, 'c3': 65, 'c4': 4.5},
-    'A3': {'c1': 90, 'c2': 70, 'c3': 90, 'c4': 3.5},
-    'A4': {'c1': 85, 'c2': 95, 'c3': 75, 'c4': 5}
+jurusan_profiles = {
+    "A1": [0.9, 0.3, 0.5, 0.8],  # Web Developer
+    "A2": [0.8, 0.6, 0.4, 0.8],  # Mobile Developer
+    "A3": [0.6, 0.1, 1.0, 0.7],  # Data Analyst
+    "A4": [0.8, 0.8, 0.7, 0.8],  # Game Developer 
 }
 
 # Data existing untuk perhitungan normalisasi
@@ -59,47 +59,62 @@ def create_table():
     conn.close()
 
 def calculate_saw(all_data_for_max_calc, new_student_data):
-    # Step 1: Gabungkan semua data untuk mencari nilai maksimum
+    # Step 1: Gabungkan semua data mahasiswa dan profil jurusan untuk mencari nilai maksimum
     all_values_for_max = [{k: m_data[k] for k in CRITERIA.keys() if k in m_data} for m_data in all_data_for_max_calc]
-    all_values_for_max.extend(JURUSAN_PROFILES.values())
 
-    # Step 2: Cari nilai maksimum untuk setiap kriteria (untuk normalisasi)
-    max_values_overall = {key: max(d[key] for d in all_values_for_max if key in d) if all_values_for_max and any(key in d for d in all_values_for_max) else 1 for key in CRITERIA.keys()}
+    # Tambahkan profil jurusan dalam bentuk dict
+    for profile_list in jurusan_profiles.values():
+        profile_dict = {key: profile_list[i] for i, key in enumerate(CRITERIA.keys())}
+        all_values_for_max.append(profile_dict)
 
-    # Step 3: Normalisasi nilai mahasiswa baru 
-    normalized_student_data = {key: new_student_data[key] / max_values_overall[key] if max_values_overall[key] != 0 else 0 for key in CRITERIA.keys()}
+    # Step 2: Hitung nilai maksimum untuk setiap kriteria
+    max_values_overall = {
+        key: max(d.get(key, 0) for d in all_values_for_max)
+        for key in CRITERIA.keys()
+    }
+
+    # Step 3: Normalisasi data mahasiswa baru
+    normalized_student_data = {
+        key: new_student_data[key] / max_values_overall[key] if max_values_overall[key] != 0 else 0
+        for key in CRITERIA.keys()
+    }
 
     final_scores_for_jurusan = {}
     detail_perhitungan = {}
 
+    # Step 4: Bandingkan dengan tiap jurusan
     for alt_code, alt_name in ALTERNATIVES.items():
-        profile = JURUSAN_PROFILES[alt_code]
-        
-        normalized_profile = {key: profile[key] / max_values_overall[key] if max_values_overall[key] != 0 else 0 for key in CRITERIA.keys()}
-        
+        profile_list = jurusan_profiles[alt_code]
+        profile_dict = {key: profile_list[i] for i, key in enumerate(CRITERIA.keys())}
+
+        normalized_profile = {
+            key: profile_dict[key] / max_values_overall[key] if max_values_overall[key] != 0 else 0
+            for key in CRITERIA.keys()
+        }
+
         compatibility_score = 0
         detail_kriteria = {}
-        
+
         for key in CRITERIA.keys():
             similarity = 1 - abs(normalized_student_data[key] - normalized_profile[key])
             weighted_score = similarity * CRITERIA[key]['weight']
             compatibility_score += weighted_score
-            
+
             detail_kriteria[key] = {
                 'mahasiswa_raw': new_student_data[key],
-                'profil_raw': profile[key],
+                'profil_raw': profile_dict[key],
                 'mahasiswa_normalized': round(normalized_student_data[key], 4),
                 'profil_normalized': round(normalized_profile[key], 4),
                 'similarity': round(similarity, 4),
                 'weighted_score': round(weighted_score, 4),
                 'weight': CRITERIA[key]['weight']
             }
-        
+
         final_scores_for_jurusan[alt_code] = compatibility_score
         detail_perhitungan[alt_code] = detail_kriteria
-    
+
     best_alternative_code = max(final_scores_for_jurusan, key=final_scores_for_jurusan.get)
-    
+
     return (
         ALTERNATIVES[best_alternative_code],
         final_scores_for_jurusan[best_alternative_code],
@@ -107,6 +122,7 @@ def calculate_saw(all_data_for_max_calc, new_student_data):
         detail_perhitungan,
         max_values_overall
     )
+
 
 @app.route('/')
 def landing():
@@ -155,7 +171,7 @@ def calculate():
                             alternatives=ALTERNATIVES,
                             criteria=CRITERIA,
                             student_data=new_student_data,
-                            jurusan_profiles=JURUSAN_PROFILES)
+                            jurusan_profiles=jurusan_profiles)
 
 # ---
 # Route untuk menampilkan daftar mahasiswa
@@ -206,7 +222,7 @@ def show_infographics():
     return render_template('team.html',
         criteria=CRITERIA,
         alternatives=ALTERNATIVES,
-        jurusan_profiles=JURUSAN_PROFILES,
+        jurusan_profiles=jurusan_profiles,
         recommendation_counts=sorted_recommendation_counts,
         total_students=total_students,
         nama_jurusan=nama_jurusan,
